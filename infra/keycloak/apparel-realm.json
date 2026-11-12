@@ -1,0 +1,94 @@
+{
+  "realm": "apparel",
+  "enabled": true,
+  "displayName": "Loom & Co.",
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": true,
+  "loginWithEmailAllowed": true,
+  "resetPasswordAllowed": true,
+  "rememberMe": true,
+  "sslRequired": "external",
+  "accessTokenLifespan": 300,
+  "ssoSessionIdleTimeout": 1800,
+  "bruteForceProtected": true,
+  "roles": {
+    "realm": [
+      { "name": "CUSTOMER", "description": "Storefront shopper" },
+      { "name": "ADMIN", "description": "Full back-office access: catalog, CMS, coupons, orders, inventory" },
+      { "name": "OPERATIONS", "description": "Back-office access to orders and inventory only" },
+      {
+        "name": "default-roles-apparel",
+        "description": "Granted to every new (self-registered) user",
+        "composite": true,
+        "composites": { "realm": ["CUSTOMER", "offline_access", "uma_authorization"] }
+      },
+      { "name": "offline_access" },
+      { "name": "uma_authorization" }
+    ]
+  },
+  "defaultRole": { "name": "default-roles-apparel" },
+  "clients": [
+    {
+      "clientId": "storefront",
+      "name": "Customer Storefront",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "redirectUris": ["http://localhost:5173/*"],
+      "webOrigins": ["http://localhost:5173"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:5173/*"
+      }
+    },
+    {
+      "clientId": "admin-portal",
+      "name": "Admin Back-Office",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "redirectUris": ["http://localhost:5174/*"],
+      "webOrigins": ["http://localhost:5174"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:5174/*"
+      }
+    }
+  ],
+  "users": [
+    {
+      "username": "admin@loomandco.example",
+      "email": "admin@loomandco.example",
+      "emailVerified": true,
+      "firstName": "Asha",
+      "lastName": "Admin",
+      "enabled": true,
+      "credentials": [{ "type": "password", "value": "admin123", "temporary": false }],
+      "realmRoles": ["ADMIN", "default-roles-apparel"]
+    },
+    {
+      "username": "ops@loomandco.example",
+      "email": "ops@loomandco.example",
+      "emailVerified": true,
+      "firstName": "Omar",
+      "lastName": "Ops",
+      "enabled": true,
+      "credentials": [{ "type": "password", "value": "ops123", "temporary": false }],
+      "realmRoles": ["OPERATIONS", "default-roles-apparel"]
+    },
+    {
+      "username": "shopper@example.com",
+      "email": "shopper@example.com",
+      "emailVerified": true,
+      "firstName": "Sam",
+      "lastName": "Shopper",
+      "enabled": true,
+      "credentials": [{ "type": "password", "value": "shopper123", "temporary": false }],
+      "realmRoles": ["CUSTOMER", "default-roles-apparel"]
+    }
+  ]
+}
